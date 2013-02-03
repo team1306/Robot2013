@@ -22,6 +22,7 @@ public class Robot extends SimpleRobot {
     Joystick left;
     Joystick right;
     TankDrive drive;
+    Victor screw;
     //Victor driveleft;
    // Victor driveright;
     //Joystick joy;
@@ -31,6 +32,7 @@ public class Robot extends SimpleRobot {
         left = new Joystick (1);
         right = new Joystick (2);
         drive = new TankDrive(1, 2, left, right);
+        screw = new Victor(3);
       //  driveleft = new Victor(1);
     //    driveright = new Victor(2);
       //  joy = new Joystick(2);
@@ -45,13 +47,19 @@ public class Robot extends SimpleRobot {
     }
     
     
-    public void tele()
-    {
+    public void tele() {
         if(right.getTrigger()) {
             drive.arcadeDrive();
         }
         else {
             drive.drive();
+        }
+        double x = xcon.getLeftJoyY();
+        if(Math.abs(x) < 0.1) {
+            screw.set(0);
+        }
+        else {
+            screw.set(x);
         }
     /*    double l = left.getY();
         double r = right.getY();
