@@ -18,12 +18,19 @@ import org.badgerbots.lib.*;
  * directory.
  */
 public class Robot extends SimpleRobot {
+	//Climber: 2 Jaguars, 4 Limit Switches, 2 Servos
+	//Dumper: 2 Victors, 2 Analogs
+	Victor hands;
+	Victor feet;
     XBoxController xcon;
     Joystick left;
     Joystick right;
     TankDrive drive;
-    Victor screw;
-    //Victor driveleft;
+	LimitSwitch upperhands;
+	LimitSwitch lowerhands;
+	LimitSwitch upperfeet;
+	LimitSwitch lowerfeet;
+   //Victor driveleft;
    // Victor driveright;
     //Joystick joy;
     //Victor upperseg;
@@ -32,7 +39,13 @@ public class Robot extends SimpleRobot {
         left = new Joystick (1);
         right = new Joystick (2);
         drive = new TankDrive(1, 2, left, right);
-        screw = new Victor(3);
+		hands = new Victor(5);
+		feet = new Victor(6);
+		upperhands = new LimitSwitch(1);
+		lowerhands = new LimitSwitch(2);
+		upperfeet = new LimitSwitch(3);
+		lowerfeet = new LimitSwitch(4);
+        // Check ports on everything later
       //  driveleft = new Victor(1);
     //    driveright = new Victor(2);
       //  joy = new Joystick(2);
