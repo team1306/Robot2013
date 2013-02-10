@@ -18,20 +18,20 @@ import org.badgerbots.lib.*;
  * directory.
  */
 public class Robot extends SimpleRobot {
-	//Climber: 2 Jaguars, 4 Limit Switches, 2 Servos
-	//Dumper: 2 Victors, 2 Analogs
-	Victor hands;
-	Victor feet;
+    //Climber: 2 Jaguars, 4 Limit Switches, 2 Servos
+    //Dumper: 2 Victors, 2 Analogs
+    Victor hands;
+    Victor feet;
     XBoxController xcon;
     Joystick left;
     Joystick right;
     TankDrive drive;
-	LimitSwitch upperhands;
-	LimitSwitch lowerhands;
-	LimitSwitch upperfeet;
-	LimitSwitch lowerfeet;
-   //Victor driveleft;
-   // Victor driveright;
+    LimitSwitch upperhands;
+    LimitSwitch lowerhands;
+    LimitSwitch upperfeet;
+    LimitSwitch lowerfeet;
+    //Victor driveleft;
+    // Victor driveright;
     //Joystick joy;
     //Victor upperseg;
     public Robot() {
@@ -39,23 +39,23 @@ public class Robot extends SimpleRobot {
         left = new Joystick (1);
         right = new Joystick (2);
         drive = new TankDrive(1, 2, left, right);
-		hands = new Victor(5);
-		feet = new Victor(6);
-		upperhands = new LimitSwitch(1);
-		lowerhands = new LimitSwitch(2);
-		upperfeet = new LimitSwitch(3);
-		lowerfeet = new LimitSwitch(4);
+	hands = new Victor(5);
+	feet = new Victor(6);
+	upperhands = new LimitSwitch(1);
+	lowerhands = new LimitSwitch(2);
+	upperfeet = new LimitSwitch(3);
+	lowerfeet = new LimitSwitch(4);
         // Check ports on everything later
-      //  driveleft = new Victor(1);
-    //    driveright = new Victor(2);
-      //  joy = new Joystick(2);
-      //  upperseg = new Victor(1);
-       // upperseg.set(0);
+	// driveleft = new Victor(1);
+	// driveright = new Victor(2);
+	// joy = new Joystick(2);
+	// upperseg = new Victor(1);
+	// upperseg.set(0);
     }
     
     public void auto()
     {
-       // driveleft.set(.22);
+	// driveleft.set(.22);
         // Timer.delay(4/1000);
     }
     
@@ -67,14 +67,21 @@ public class Robot extends SimpleRobot {
         else {
             drive.drive();
         }
-        double x = xcon.getLeftJoyY();
-        if(Math.abs(x) < 0.1) {
-            screw.set(0);
+        double h = xcon.getLeftJoyY();
+	double f = xcon.getRightJoyY();
+        if(Math.abs(h) < 0.1) {
+            hands.set(0);
         }
         else {
-            screw.set(x);
+            hands.set(h);
         }
-    /*    double l = left.getY();
+	if(Math.abs(f) < 0.1) {
+	    feet.set(0);
+	}
+	else {
+	    feet.set(f);
+	}
+    /*  double l = left.getY();
         double r = right.getY();
         System.out.println(l + ", " + r);
         if(Math.abs(l) < 0.1) {
