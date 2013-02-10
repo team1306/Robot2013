@@ -105,77 +105,62 @@ public class Robot extends SimpleRobot
 	// upperseg.set(0);
     }
     
-    public void auto()
-    {
+    public void auto() {
 	// driveleft.set(.22);
         // Timer.delay(4/1000);
     }
     
     
-    public void tele() 
-    {
+    public void tele() {
         //drive code
-       if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-lastTime) > 2000)
-       {
+       if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-lastTime) > 2000) {
            driveMode = !driveMode;
            lastTime = Timer.getFPGATimestamp();
        }
        
-       if (driveMode)
-       {
+       if (driveMode) {
            drive.drive();
        }
-       else
-       {
+       else {
            drive.arcadeDrive();
        }
        
        //dumper code
        
-    System.out.println(TestA.getVoltage());
+       System.out.println(TestA.getVoltage());
       
-    if (xcon.getButtonA())
-       {
-           dumper.LowSlotLoad();
+       if (xcon.getButtonA()) {
+	   dumper.LowSlotLoad();
        }
-       else if (xcon.getButtonB())
-       {
-           dumper.LowGoalDump();
+       else if (xcon.getButtonB()) {
+	   dumper.LowGoalDump();
        }
-       else  if (xcon.getButtonX())
-       {
-           dumper.PyramidClimb();
+       else if (xcon.getButtonX()) {
+	   dumper.PyramidClimb();
        }
-       else if (xcon.getButtonY())
-       {
-           dumper.PyramidDump();
+       else if (xcon.getButtonY()) {
+	   dumper.PyramidDump();
        }
-       else if (xcon.getButtonLS())
-       {
-           dumper.MiddleSlotLoad();
+       else if (xcon.getButtonLS()) {
+	   dumper.MiddleSlotLoad();
        }
-       else if (xcon.getButtonRS())
-       {
-           dumper.ResetOrStop();
+       else if (xcon.getButtonRS()) {
+	   dumper.ResetOrStop();
        }
-        
+       
        //climber code
-       if (!(xcon.getButtonLB() && rightJoy.getRawButton(9)))
-        {
-       if ((xcon.getButtonRB() && rightJoy.getRawButton(10) && !tipping) || stinger.isTipped)
-                {
-                    stinger.tip();
-                }
-            if (stinger.isTipped)
-                 {
-                     //climb code
-                 }
-              }
-            else //stop method for invalid climb
-               {
-                //declimb code
-                stinger.untip();
-                }
+       if (!(xcon.getButtonLB() && rightJoy.getRawButton(9))) {
+	   if ((xcon.getButtonRB() && rightJoy.getRawButton(10) && !tipping) || stinger.isTipped) {
+	       stinger.tip();
+	   }
+	   if (stinger.isTipped) {
+	       //climb code
+	   }
+       }
+       else { //stop method for invalid climb
+	   //declimb code
+	   stinger.untip();
+       }
     }
     
     /**
@@ -183,8 +168,7 @@ public class Robot extends SimpleRobot
      */
     public void autonomous() 
     {
-        while (isAutonomous())
-        {
+        while (isAutonomous()) {
             auto();
             Timer.delay(4/1000);
         }
@@ -195,8 +179,7 @@ public class Robot extends SimpleRobot
      */
     public void operatorControl()
     {
-        while(isOperatorControl()) 
-        {
+        while(isOperatorControl()) {
             tele();
             Timer.delay(3/1000);
         }
