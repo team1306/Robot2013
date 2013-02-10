@@ -17,12 +17,21 @@ import org.badgerbots.lib.*;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
+<<<<<<< HEAD
 public class Robot extends SimpleRobot
 {
     Joystick leftJoy;
     Joystick rightJoy;
+=======
+public class Robot extends SimpleRobot {
+	//Climber: 2 Jaguars, 4 Limit Switches, 2 Servos
+	//Dumper: 2 Victors, 2 Analogs
+	Victor hands;
+	Victor feet;
+>>>>>>> a466a6dd3f754756d45e6fe0491825a5edf35ad2
     XBoxController xcon;
     TankDrive drive;
+<<<<<<< HEAD
     Victor dumpHigh;
     Victor dumpLow;
     Pot dumpLowPot;
@@ -79,6 +88,33 @@ public class Robot extends SimpleRobot
         lastTime = 0;
         tipping = false;
         TestA = new AnalogChannel(1);
+=======
+	LimitSwitch upperhands;
+	LimitSwitch lowerhands;
+	LimitSwitch upperfeet;
+	LimitSwitch lowerfeet;
+   //Victor driveleft;
+   // Victor driveright;
+    //Joystick joy;
+    //Victor upperseg;
+    public Robot() {
+        xcon = new XBoxController(3);
+        left = new Joystick (1);
+        right = new Joystick (2);
+        drive = new TankDrive(1, 2, left, right);
+		hands = new Victor(5);
+		feet = new Victor(6);
+		upperhands = new LimitSwitch(1);
+		lowerhands = new LimitSwitch(2);
+		upperfeet = new LimitSwitch(3);
+		lowerfeet = new LimitSwitch(4);
+        // Check ports on everything later
+      //  driveleft = new Victor(1);
+    //    driveright = new Victor(2);
+      //  joy = new Joystick(2);
+      //  upperseg = new Victor(1);
+       // upperseg.set(0);
+>>>>>>> a466a6dd3f754756d45e6fe0491825a5edf35ad2
     }
     
     public void auto()
