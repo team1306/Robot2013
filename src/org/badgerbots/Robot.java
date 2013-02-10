@@ -21,10 +21,10 @@ public class Robot extends SimpleRobot
 {
     Joystick leftJoy;
     Joystick rightJoy;
-	//Climber: 2 Jaguars, 4 Limit Switches, 2 Servos
-	//Dumper: 2 Victors, 2 Analogs
-	Victor hands;
-	Victor feet;
+    //Climber: 2 Jaguars, 4 Limit Switches, 2 Servos
+    //Dumper: 2 Victors, 2 Analogs
+    Victor hands;
+    Victor feet;
     XBoxController xcon;
     TankDrive drive;
     Victor dumpHigh;
@@ -83,26 +83,26 @@ public class Robot extends SimpleRobot
         lastTime = 0;
         tipping = false;
         TestA = new AnalogChannel(1);
-    //Victor driveleft;
-    // Victor driveright;
-    //Joystick joy;
-    //Victor upperseg;
+	//Victor driveleft;
+	// Victor driveright;
+	//Joystick joy;
+	//Victor upperseg;
         // Check ports on everything later
 	// driveleft = new Victor(1);
 	// driveright = new Victor(2);
 	// joy = new Joystick(2);
 	// upperseg = new Victor(1);
 	// upperseg.set(0);
-   //Victor driveleft;
-    //Victor driveleft;
-   // Victor driveright;
-    //Joystick joy;
-    //Victor upperseg;
-      //  driveleft = new Victor(1);
-    //    driveright = new Victor(2);
-      //  joy = new Joystick(2);
-      //  upperseg = new Victor(1);
-       // upperseg.set(0);
+	//Victor driveleft;
+	//Victor driveleft;
+	// Victor driveright;
+	//Joystick joy;
+	//Victor upperseg;
+	//  driveleft = new Victor(1);
+	//    driveright = new Victor(2);
+	//  joy = new Joystick(2);
+	//  upperseg = new Victor(1);
+	// upperseg.set(0);
     }
     
     public void auto()
