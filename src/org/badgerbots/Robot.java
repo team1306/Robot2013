@@ -112,46 +112,6 @@ public class Robot extends SimpleRobot
     }
     
     
-    public void tele() {
-        if(right.getTrigger()) {
-            drive.arcadeDrive();
-        }
-        else {
-            drive.drive();
-        }
-        double h = xcon.getLeftJoyY();
-	double f = xcon.getRightJoyY();
-        if(Math.abs(h) < 0.1) {
-            hands.set(0);
-        }
-        else {
-            hands.set(h);
-        }
-	if(Math.abs(f) < 0.1) {
-	    feet.set(0);
-	}
-	else {
-	    feet.set(f);
-	}
-    /*  double l = left.getY();
-        double r = right.getY();
-        System.out.println(l + ", " + r);
-        if(Math.abs(l) < 0.1) {
-            driveleft.set(0);
-        }
-        else {
-            driveleft.set(-l);
-        }
-        if(Math.abs(r) < 0.1) {
-            driveright.set(0);
-        }
-        else {
-            driveright.set(r);
-        }*/
-     Timer.delay(3/1000);
-    }
-    
-    
     public void tele() 
     {
         //drive code
