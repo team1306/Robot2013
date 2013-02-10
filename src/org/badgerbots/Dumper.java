@@ -24,7 +24,7 @@ public class Dumper {
         double lowdiff = pLow.get() - POSITIONS [0][0];
         double highdiff = pHigh.get() - POSITIONS [0][1];
         
-        /*math*/
+        /*Proportional Controller*/
         
         sLow.set(0);
         sHigh.set(0);
@@ -37,7 +37,7 @@ public class Dumper {
         double highdiff = pHigh.get() - POSITIONS [1][1];
       
         
-        /*math*/
+        /*Proportional Controller*/
     
         sLow.set(0);
         sHigh.set(0);
@@ -48,7 +48,7 @@ public class Dumper {
         double lowdiff = pLow.get() - POSITIONS [2][0];
         double highdiff = pHigh.get() - POSITIONS [2][1];
         
-        /*math*/
+        /*Proportional Controller*/
         
         sLow.set(0);
         sHigh.set(0);
@@ -59,7 +59,7 @@ public class Dumper {
         double lowdiff = pLow.get() - POSITIONS [3][0];
         double highdiff = pHigh.get() - POSITIONS [3][1];
         
-        /*math*/
+        /*Proportional Controller*/
         
         sLow.set(0);
         sHigh.set(0);
@@ -70,7 +70,7 @@ public class Dumper {
         double lowdiff = pLow.get() - POSITIONS [4][0];
         double highdiff = pHigh.get() - POSITIONS [4][1];
         
-        /*math*/
+        /*Proportional Controller*/
         
         sLow.set(0);
         sHigh.set(0);
@@ -81,7 +81,7 @@ public class Dumper {
         double lowdiff = pLow.get() - POSITIONS [5][0];
         double highdiff = pHigh.get() - POSITIONS [5][1];
         
-        /*math*/
+        /*Proportional Controller*/
         
         sLow.set(0);
         sHigh.set(0);
@@ -92,7 +92,7 @@ public class Dumper {
         double lowdiff = pLow.get() - POSITIONS [6][0];
         double highdiff = pHigh.get() - POSITIONS [6][1];
         
-        /*math*/
+        /*Proportional Controller*/
         
         sLow.set(0);
         sHigh.set(0);
