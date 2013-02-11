@@ -125,8 +125,24 @@ public class Robot extends SimpleRobot
            drive.arcadeDrive();
        }
        
+       if(xcon.getRightTrigger()){
+	   double h = xcon.getRightJoyY();
+	   double f = xcon.getLeftJoyY();
+	   if(Math.abs(h) < 0.1) {
+	       hands.set(0);
+	   }
+	   else {
+	       hands.set(h);
+	   }
+	   if(Math.abs(f) < 0.1) {
+	       feet.set(0);
+	   }
+	   else {
+	       feet.set(f);
+	   }
+       }
        //dumper code
-       
+       /*
        System.out.println(TestA.getVoltage());
       
        if (xcon.getButtonA()) {
@@ -160,7 +176,7 @@ public class Robot extends SimpleRobot
        else { //stop method for invalid climb
 	   //declimb code
 	   stinger.untip();
-       }
+	   }*/
     }
     
     /**
