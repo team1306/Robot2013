@@ -20,7 +20,8 @@ public class Stinger {
     boolean lastSwitch;
     boolean runLightSet;
     public boolean isTipped;
-    Value on;
+    DoubleSolenoid.Value on;
+    XBoxController xcon;
 
     public Stinger(Compressor c, DoubleSolenoid sol, Solenoid chargeLt, Solenoid runLt, XBoxController x)
     {

@@ -17,8 +17,7 @@ import org.badgerbots.lib.*;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends SimpleRobot
-{
+public class Robot extends SimpleRobot {
     Joystick leftJoy;
     Joystick rightJoy;
     //Climber: 2 Jaguars, 4 Limit Switches, 2 Servos
@@ -126,7 +125,7 @@ public class Robot extends SimpleRobot
            drive.arcadeDrive();
        }
        
-       if(xcon.getRightTrigger()){
+       if(xcon.getRightTrigger() > 0.1){
 	   double h = xcon.getRightJoyY();
 	   double f = xcon.getLeftJoyY();
 	   if(Math.abs(h) < 0.1) {
@@ -147,7 +146,7 @@ public class Robot extends SimpleRobot
 	   stinger.runCompressor();
        }
 
-       if(xcon.getButtonB() && !stinger.isTipped()) {
+       if(xcon.getButtonB() && !stinger.isTipped) {
 	   stinger.tip();
        }
        //dumper code
