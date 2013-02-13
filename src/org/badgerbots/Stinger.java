@@ -13,7 +13,7 @@ import org.badgerbots.lib.*;
 public class Stinger {
     
     Compressor compress;
-    DoubleSolenoid solen;
+    Solenoid solen;
     Solenoid chargeLight;
     Solenoid runLight;
     DigitalInput manSwitch;
@@ -22,7 +22,7 @@ public class Stinger {
     public boolean isTipped;
     XBoxController xcon;
 
-    public Stinger(Compressor c, DoubleSolenoid sol, Solenoid chargeLt, Solenoid runLt, XBoxController x)
+    public Stinger(Compressor c, Solenoid sol, Solenoid chargeLt, Solenoid runLt, XBoxController x)
     {
         compress = c;
         solen = sol;

@@ -41,7 +41,7 @@ public class Robot extends SimpleRobot {
     LimitSwitch climbsd;
     Climber climber;
     Compressor stingCompress;
-    DoubleSolenoid sting;
+    Solenoid sting;
     Solenoid stingRunLt;
     Solenoid stingChargeLt;
     DigitalInput stingSw;
@@ -73,7 +73,7 @@ public class Robot extends SimpleRobot {
         climbsd = new LimitSwitch(4);
         climber = new Climber(climbHands, climbFeet, climba, climbb, climbsa, climbsb, climbsc, climbsd);
         stingCompress = new Compressor(1, 5);
-        sting = new DoubleSolenoid (1, 2);
+        sting = new Solenoid (1);
         stingRunLt = new Solenoid(3);
         stingChargeLt = new Solenoid(4);
         stingSw = new DigitalInput(6);
