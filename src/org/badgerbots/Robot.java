@@ -149,6 +149,9 @@ public class Robot extends SimpleRobot
        if(xcon.getButtonB()) {
 	   sting.set(new Value (1));
        }
+       else {
+	   sting.set(new Value (2));
+       }
        //dumper code
        /*
        System.out.println(TestA.getVoltage());
