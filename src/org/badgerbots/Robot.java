@@ -77,7 +77,7 @@ public class Robot extends SimpleRobot {
         stingRunLt = new Solenoid(3);
         stingChargeLt = new Solenoid(4);
         stingSw = new DigitalInput(6);
-        stinger = new Stinger(stingCompress, sting, stingRunLt, stingChargeLt, stingSw);
+        stinger = new Stinger(stingCompress, sting, stingRunLt, stingChargeLt, xcon);
         driveMode = true;   //default to tank drive
         lastTime = 0;
         tipping = false;

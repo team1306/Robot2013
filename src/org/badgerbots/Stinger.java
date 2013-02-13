@@ -33,7 +33,7 @@ public class Stinger {
 	runLightSet = false;
 	xcon = x;
 	lastSwitch = xcon.getButtonA();
-	on.value = 1;
+	on = new DoubleSolenoid.Value(1);
     }
     
     public void runCompressor()
