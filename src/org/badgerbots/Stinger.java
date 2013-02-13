@@ -20,7 +20,6 @@ public class Stinger {
     boolean lastSwitch;
     boolean runLightSet;
     public boolean isTipped;
-    DoubleSolenoid.Value on;
     XBoxController xcon;
 
     public Stinger(Compressor c, DoubleSolenoid sol, Solenoid chargeLt, Solenoid runLt, XBoxController x)
@@ -33,7 +32,6 @@ public class Stinger {
 	runLightSet = false;
 	xcon = x;
 	lastSwitch = xcon.getButtonA();
-	on = new DoubleSolenoid.Value(1);
     }
     
     public void runCompressor()
@@ -56,7 +54,7 @@ public class Stinger {
     
     public void tip()
     {
-        solen.set(on);
+        solen.set(true);
         isTipped = true;
     }
 }
