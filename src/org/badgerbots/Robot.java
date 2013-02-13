@@ -121,6 +121,7 @@ public class Robot extends SimpleRobot
        if (driveMode) {
            drive.drive();
        }
+
        else {
            drive.arcadeDrive();
        }
@@ -143,14 +144,11 @@ public class Robot extends SimpleRobot
        }
 
        if(xcon.getButtonA()) {
-	   stingCompress.run();
+	   stinger.runCompressor();
        }
 
-       if(xcon.getButtonB()) {
-	   sting.set(new Value (1));
-       }
-       else {
-	   sting.set(new Value (2));
+       if(xcon.getButtonB() && !stinger.isTipped()) {
+	   stinger.tip();
        }
        //dumper code
        /*

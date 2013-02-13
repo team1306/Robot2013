@@ -12,48 +12,6 @@ import org.badgerbots.lib.*;
  */
 public class Stinger {
     
-    public Stinger(Compressor c, DoubleSolenoid sol, Solenoid chargeLt, Solenoid runLt, DigitalInput manSw)
-    {
-        compress = c;
-        solen = sol;
-        chargeLight = chargeLt;
-        runLight = runLt;
-        lastSwitch = manSw.get();
-        manSwitch = manSw;
-        isTipped = false;
-    }
-    
-    public void runCompressor()
-    {
-        if (manSwitch.get() == true && manSwitch.get() != lastSwitch)
-        {
-            compress.start();
-            runLightSet = true;
-        }
-        else if (manSwitch.get() == false && manSwitch.get() != lastSwitch)
-        {
-            compress.stop();
-            runLightSet = false;
-        }
-        
-        lastSwitch = manSwitch.get();
-        chargeLight.set(compress.getPressureSwitchValue());
-        runLight.set(runLightSet);
-    }
-    
-    public void tip()
-    {
-        
-        isTipped = true;
-    }
-    
-    public void untip()
-    {
-        
-        isTipped = false;
-    }
-            
-    
     Compressor compress;
     DoubleSolenoid solen;
     Solenoid chargeLight;
@@ -62,4 +20,42 @@ public class Stinger {
     boolean lastSwitch;
     boolean runLightSet;
     public boolean isTipped;
+    Value on;
+
+    public Stinger(Compressor c, DoubleSolenoid sol, Solenoid chargeLt, Solenoid runLt, XBoxController x)
+    {
+        compress = c;
+        solen = sol;
+        chargeLight = chargeLt;
+        runLight = runLt;
+        isTipped = false;
+	runLightSet = false;
+	xcon = x;
+	lastSwitch = xcon.getButtonA();
+	on.value = 1;
+    }
+    
+    public void runCompressor()
+    {
+        if (xcon.getButtonA() == true && xcon.getButtonA() != lastSwitch)
+        {
+            compress.start();
+            runLightSet = true;
+        }
+        else if (xcon.getButtonA() == false && xcon.getButtonA() != lastSwitch)
+        {
+            compress.stop();
+            runLightSet = false;
+        }
+        
+        lastSwitch = xcon.getButtonA();
+        chargeLight.set(compress.getPressureSwitchValue());
+        runLight.set(runLightSet);
+    }
+    
+    public void tip()
+    {
+        solen.set(on);
+        isTipped = true;
+    }
 }
