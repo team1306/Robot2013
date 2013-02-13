@@ -141,6 +141,14 @@ public class Robot extends SimpleRobot
 	       feet.set(f);
 	   }
        }
+
+       if(xcon.getButtonA()) {
+	   stingCompress.run();
+       }
+
+       if(xcon.getButtonB()) {
+	   sting.set(new Value (1));
+       }
        //dumper code
        /*
        System.out.println(TestA.getVoltage());
