@@ -12,7 +12,6 @@ import org.badgerbots.lib.*;
  */
 public class Stinger {
     
-    Compressor compress;
     Solenoid solen;
     Solenoid chargeLight;
     Solenoid runLight;
@@ -22,8 +21,7 @@ public class Stinger {
     public boolean isTipped;
     XBoxController xcon;
 
-    public Stinger(Compressor c, Solenoid sol, Solenoid chargeLt, Solenoid runLt, XBoxController x)
-    {
+    public Stinger(Solenoid sol, Solenoid chargeLt, Solenoid runLt, XBoxController x) {
         compress = c;
         solen = sol;
         chargeLight = chargeLt;
@@ -34,26 +32,7 @@ public class Stinger {
 	lastSwitch = xcon.getButtonA();
     }
     
-    public void runCompressor()
-    {
-        if (xcon.getButtonA() == true && xcon.getButtonA() != lastSwitch)
-        {
-            compress.start();
-            runLightSet = true;
-        }
-        else if (xcon.getButtonA() == false && xcon.getButtonA() != lastSwitch)
-        {
-            compress.stop();
-            runLightSet = false;
-        }
-        
-        lastSwitch = xcon.getButtonA();
-        chargeLight.set(compress.getPressureSwitchValue());
-        runLight.set(runLightSet);
-    }
-    
-    public void tip()
-    {
+    public void tip() {
         solen.set(true);
         isTipped = true;
     }

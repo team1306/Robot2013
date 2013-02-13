@@ -73,6 +73,7 @@ public class Robot extends SimpleRobot {
         climbsd = new LimitSwitch(4);
         climber = new Climber(climbHands, climbFeet, climba, climbb, climbsa, climbsb, climbsc, climbsd);
         stingCompress = new Compressor(1, 5);
+	stingCompress.start();
         sting = new Solenoid (1);
         stingRunLt = new Solenoid(3);
         stingChargeLt = new Solenoid(4);
@@ -142,9 +143,7 @@ public class Robot extends SimpleRobot {
 	   }
        }
 
-       if(xcon.getButtonA()) {
-	   stinger.runCompressor();
-       }
+       stinger.runCompressor();
 
        if(xcon.getButtonB() && !stinger.isTipped) {
 	   stinger.tip();
