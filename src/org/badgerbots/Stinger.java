@@ -22,7 +22,7 @@ public class Stinger {
     XBoxController xcon;
 
     public Stinger(Solenoid sol, Solenoid chargeLt, Solenoid runLt, XBoxController x) {
-        compress = c;
+//        compress = c;
         solen = sol;
         chargeLight = chargeLt;
         runLight = runLt;

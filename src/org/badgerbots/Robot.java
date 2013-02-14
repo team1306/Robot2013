@@ -48,8 +48,10 @@ public class Robot extends SimpleRobot {
     Stinger stinger;
     boolean driveMode;
     double lastTime;
+    double lastTime2;
+    boolean compstate;
     boolean tipping;
-    AnalogChannel TestA;
+   // AnalogChannel TestA;
     
     
     public Robot()
@@ -72,17 +74,19 @@ public class Robot extends SimpleRobot {
         climbsc = new LimitSwitch(3);
         climbsd = new LimitSwitch(4);
         climber = new Climber(climbHands, climbFeet, climba, climbb, climbsa, climbsb, climbsc, climbsd);
-        stingCompress = new Compressor(1, 5);
-	stingCompress.start();
+        stingCompress = new Compressor(5,1);
+	//stingCompress.start();
         sting = new Solenoid (1);
         stingRunLt = new Solenoid(3);
         stingChargeLt = new Solenoid(4);
         stingSw = new DigitalInput(6);
-        stinger = new Stinger(stingCompress, sting, stingRunLt, stingChargeLt, xcon);
+        stinger = new Stinger(sting, stingRunLt, stingChargeLt, xcon);
         driveMode = true;   //default to tank drive
         lastTime = 0;
+        lastTime2 = 0;
         tipping = false;
-        TestA = new AnalogChannel(1);
+        compstate = false;
+        //TestA = new AnalogChannel(1);
 	//Victor driveleft;
 	// Victor driveright;
 	//Joystick joy;
@@ -126,25 +130,40 @@ public class Robot extends SimpleRobot {
            drive.arcadeDrive();
        }
        
-       if(xcon.getRightTrigger() > 0.1){
+//       if(xcon.getRightTrigger() > 0.1){
 	   double h = xcon.getRightJoyY();
 	   double f = xcon.getLeftJoyY();
 	   if(Math.abs(h) < 0.1) {
-	       hands.set(0);
+	       climbHands.set(0);
 	   }
 	   else {
-	       hands.set(h);
+	       climbHands.set(h);
+               System.out.println("right joy " + h + "     left joy "  + f);
 	   }
 	   if(Math.abs(f) < 0.1) {
-	       feet.set(0);
+	       climbFeet.set(0);
 	   }
 	   else {
-	       feet.set(f);
+	       climbFeet.set(f);
 	   }
-       }
+    //   }
 
-       stinger.runCompressor();
-
+     if( leftJoy.getRawButton(7) && (Timer.getFPGATimestamp()-lastTime2) > 2000)
+             {
+                 compstate = !compstate;
+             }
+     
+     if (compstate != stingCompress.enabled())
+     {
+         if (compstate)
+         {
+             stingCompress.start();
+         }
+         else
+         {
+             stingCompress.stop();
+         }
+     }
        if(xcon.getButtonB() && !stinger.isTipped) {
 	   stinger.tip();
        }
