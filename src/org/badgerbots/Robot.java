@@ -47,6 +47,7 @@ public class Robot extends SimpleRobot {
     double lastTime2;
     boolean compstate;
     boolean tipping;
+    boolean climbing;
    // AnalogChannel TestA;
     
     
@@ -82,6 +83,7 @@ public class Robot extends SimpleRobot {
         lastTime2 = 0;
         tipping = false;
         compstate = false;
+        climbing = false;
         //TestA = new AnalogChannel(1);
 	//Victor driveleft;
 	// Victor driveright;
@@ -112,18 +114,20 @@ public class Robot extends SimpleRobot {
     
     
     public void tele() {
-       // drive code
-       if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-lastTime) > 2000) {
-           driveMode = !driveMode;
-           lastTime = Timer.getFPGATimestamp();
-       }
+       if(!climbing) {
+         // drive code
+        if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-lastTime) > 2000) {
+            driveMode = !driveMode;
+            lastTime = Timer.getFPGATimestamp();
+        }
        
-       if (driveMode) {
-           drive.drive();
-       }
+        if (driveMode) {
+            drive.drive();
+        }
 
-       else {
-           drive.arcadeDrive();
+        else {
+            drive.arcadeDrive();
+        }
        }
        
        // climber code
@@ -186,20 +190,6 @@ public class Robot extends SimpleRobot {
        else if (xcon.getButtonRS()) {
 	   dumper.ResetOrStop();
        }
-       
-       //climber code
-       if (!(xcon.getButtonLB() && rightJoy.getRawButton(9))) {
-	   if ((xcon.getButtonRB() && rightJoy.getRawButton(10) && !tipping) || stinger.isTipped) {
-	       stinger.tip();
-	   }
-	   if (stinger.isTipped) {
-	       //climb code
-	   }
-       }
-       else { //stop method for invalid climb
-	   //declimb code
-	   stinger.untip();
-	   }*/
     }
     
     /**
