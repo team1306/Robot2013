@@ -134,13 +134,15 @@ public class Robot extends SimpleRobot {
 	   climbHands.set(0);
        }
        else {
-	   climbHands.set(h-0.15);
+           if(h > 0) climbHands.set(h - 0.15);
+           else climbHands.set(h + 0.15);
        }
        if(Math.abs(f) < 0.15) {
 	   climbFeet.set(0);
        }
        else {
-	   climbFeet.set(f-0.15);
+           if(f > 0) climbFeet.set(f - 0.15);
+           else climbFeet.set(f + 0.15);
        }
        System.out.println(climbHands.get() + "     " +climbFeet.get());
        // compressor code
