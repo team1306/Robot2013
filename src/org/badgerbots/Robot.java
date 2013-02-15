@@ -20,10 +20,6 @@ import org.badgerbots.lib.*;
 public class Robot extends SimpleRobot {
     Joystick leftJoy;
     Joystick rightJoy;
-    //Climber: 2 Jaguars, 4 Limit Switches, 2 Servos
-    //Dumper: 2 Victors, 2 Analogs
-    Victor hands;
-    Victor feet;
     XBoxController xcon;
     TankDrive drive;
     Victor dumpHigh;
@@ -116,7 +112,7 @@ public class Robot extends SimpleRobot {
     
     
     public void tele() {
-        //drive code
+       // drive code
        if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-lastTime) > 2000) {
            driveMode = !driveMode;
            lastTime = Timer.getFPGATimestamp();
@@ -130,43 +126,42 @@ public class Robot extends SimpleRobot {
            drive.arcadeDrive();
        }
        
-//       if(xcon.getRightTrigger() > 0.1){
-	   double h = xcon.getRightJoyY();
-	   double f = xcon.getLeftJoyY();
-	   if(Math.abs(h) < 0.1) {
-	       climbHands.set(0);
-	   }
-	   else {
-	       climbHands.set(h);
-               System.out.println("right joy " + h + "     left joy "  + f);
-	   }
-	   if(Math.abs(f) < 0.1) {
-	       climbFeet.set(0);
-	   }
-	   else {
-	       climbFeet.set(f);
-	   }
-    //   }
+       // climber code
+       double h = xcon.getRightJoyY();
+       double f = xcon.getLeftJoyY();
+       System.out.println("right joy " + h + "     left joy "  + f);
+       if(Math.abs(h) < 0.1) {
+	   climbHands.set(0);
+       }
+       else {
+	   climbHands.set(h);    
+       }
+       if(Math.abs(f) < 0.1) {
+	   climbFeet.set(0);
+       }
+       else {
+	   climbFeet.set(f);
+       }
 
-     if( leftJoy.getRawButton(7) && (Timer.getFPGATimestamp()-lastTime2) > 2000)
-             {
-                 compstate = !compstate;
-             }
+       // compressor code
+       if(leftJoy.getRawButton(7) && (Timer.getFPGATimestamp()-lastTime2) > 2000) {
+	   compstate = !compstate;
+       }
      
-     if (compstate != stingCompress.enabled())
-     {
-         if (compstate)
-         {
-             stingCompress.start();
-         }
-         else
-         {
-             stingCompress.stop();
-         }
-     }
+       if(compstate != stingCompress.enabled()) {
+	   if(compstate) {
+	       stingCompress.start();
+	   }
+	   else {
+	       stingCompress.stop();
+	   }
+       }
+       
+       // stinger code
        if(xcon.getButtonB() && !stinger.isTipped) {
 	   stinger.tip();
        }
+
        //dumper code
        /*
        System.out.println(TestA.getVoltage());
