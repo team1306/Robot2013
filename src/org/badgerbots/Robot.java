@@ -37,7 +37,7 @@ public class Robot extends SimpleRobot {
     LimitSwitch climbsd;
     Climber climber;
     Compressor stingCompress;
-    Solenoid sting;
+    DoubleSolenoid sting;
     Solenoid stingRunLt;
     Solenoid stingChargeLt;
     DigitalInput stingSw;
@@ -72,7 +72,7 @@ public class Robot extends SimpleRobot {
         climber = new Climber(climbHands, climbFeet, climba, climbb, climbsa, climbsb, climbsc, climbsd);
         stingCompress = new Compressor(5,1);
 	//stingCompress.start();
-        sting = new Solenoid (1);
+        sting = new DoubleSolenoid (1, 2);
         stingRunLt = new Solenoid(3);
         stingChargeLt = new Solenoid(4);
         stingSw = new DigitalInput(6);
@@ -130,19 +130,19 @@ public class Robot extends SimpleRobot {
        double h = xcon.getRightJoyY();
        double f = xcon.getLeftJoyY();
        System.out.println("right joy " + h + "     left joy "  + f);
-       if(Math.abs(h) < 0.1) {
+       if(Math.abs(h) < 0.15) {
 	   climbHands.set(0);
        }
        else {
-	   climbHands.set(h);    
+	   climbHands.set(h-0.15);
        }
-       if(Math.abs(f) < 0.1) {
+       if(Math.abs(f) < 0.15) {
 	   climbFeet.set(0);
        }
        else {
-	   climbFeet.set(f);
+	   climbFeet.set(f-0.15);
        }
-
+       System.out.println(climbHands.get() + "     " +climbFeet.get());
        // compressor code
        if(leftJoy.getRawButton(7) && (Timer.getFPGATimestamp()-lastTime2) > 2000) {
 	   compstate = !compstate;
