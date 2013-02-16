@@ -123,12 +123,12 @@ public class Robot extends SimpleRobot {
 
     public void driveStraight(double distance) {
 	double rate = 5;
-	righte.reset();
+	righte.reset(); // sets encoder count to 0
 	lefte.reset();
-	rightc.setSetpoint(distance);
-	leftc.setSetpoint(distance);
+	rightc.setSetpoint(rate); // sets each PID controller to manage the speed and keep it close to rate
+	leftc.setSetpoint(rate);
 	
-	while(Math.abs(distance - righte.get()) > 5 || Math.abs(distance - lefte.get()) > 5) {
+	while(Math.abs(distance - righte.get()) > 5 || Math.abs(distance - lefte.get()) > 5) { // do this until the robot has moved distance
 	    Timer.delay(4/1000);
 	}
     }
