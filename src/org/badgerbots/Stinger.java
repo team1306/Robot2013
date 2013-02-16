@@ -12,7 +12,7 @@ import org.badgerbots.lib.*;
  */
 public class Stinger {
     
-    Solenoid solen;
+    DoubleSolenoid solen;
     Solenoid chargeLight;
     Solenoid runLight;
     DigitalInput manSwitch;
@@ -20,8 +20,9 @@ public class Stinger {
     boolean runLightSet;
     public boolean isTipped;
     XBoxController xcon;
+    DoubleSolenoid.Value v;
 
-    public Stinger(Solenoid sol, Solenoid chargeLt, Solenoid runLt, XBoxController x) {
+    public Stinger(DoubleSolenoid sol, Solenoid chargeLt, Solenoid runLt, XBoxController x) {
 //        compress = c;
         solen = sol;
         chargeLight = chargeLt;
@@ -33,7 +34,7 @@ public class Stinger {
     }
     
     public void tip() {
-        solen.set(true);
+        // solen.set(1, 1);
         isTipped = true;
     }
 }
