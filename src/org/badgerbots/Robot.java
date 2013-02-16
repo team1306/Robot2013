@@ -21,6 +21,8 @@ public class Robot extends SimpleRobot {
     Joystick leftJoy;
     Joystick rightJoy;
     XBoxController xcon;
+    Jaguar leftm;
+    Jaguar rightm;
     TankDrive drive;
     Victor dumpHigh;
     Victor dumpLow;
@@ -48,6 +50,10 @@ public class Robot extends SimpleRobot {
     boolean compstate;
     boolean tipping;
     boolean climbing;
+    Encoder lefte;
+    Encoder righte;
+    PIDController leftc;
+    PIDController rightc;
    // AnalogChannel TestA;
     
     
@@ -56,7 +62,9 @@ public class Robot extends SimpleRobot {
         leftJoy = new Joystick(1);
         rightJoy = new Joystick(2);
         xcon = new XBoxController(3);
-        drive = new TankDrive(1, 2, leftJoy, rightJoy);
+	leftm = new Jaguar(1);
+	rightm = new Jaguar(2);
+        drive = new TankDrive(leftm, rightm, leftJoy, rightJoy);
         dumpHigh = new Victor (3);
         dumpLow = new Victor (4);
         dumpLowPot = new Pot (1);
@@ -84,9 +92,15 @@ public class Robot extends SimpleRobot {
         tipping = false;
         compstate = false;
         climbing = false;
+	lefte = new Encoder(7,8);
+	righte = new Encoder(9,10);
+	lefte.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
+	righte.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
+	leftc = new PIDController(0.2, 0.3, 0.2, lefte, leftm);
+	rightc = new PIDController(0.2, 0.3, 0.2, righte, rightm);
         //TestA = new AnalogChannel(1);
 	//Victor driveleft;
-	// Victor driveright;
+	// Victor driveright;	
 	//Joystick joy;
 	//Victor upperseg;
         // Check ports on everything later
@@ -104,7 +118,19 @@ public class Robot extends SimpleRobot {
 	//    driveright = new Victor(2);
 	//  joy = new Joystick(2);
 	//  upperseg = new Victor(1);
-	// upperseg.set(0);
+	// upperseg.sept(0);
+    }
+
+    public void driveStraight(double distance) {
+	double rate = 5;
+	righte.reset();
+	lefte.reset();
+	rightc.setSetpoint(distance);
+	leftc.setSetpoint(distance);
+	
+	while(Math.abs(distance - righte.get()) > 5 || Math.abs(distance - lefte.get()) > 5) {
+	    Timer.delay(4/1000);
+	}
     }
     
     public void auto() {
