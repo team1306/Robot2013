@@ -33,8 +33,14 @@ public class Stinger {
 	lastSwitch = xcon.getButtonA();
     }
     
-    public void tip() {
-        // solen.set(1, 1);
+    public void tip()
+    {
+            solen.set(DoubleSolenoid.Value.kForward);
         isTipped = true;
+    }
+    
+    public void untip()
+    {
+        solen.set(DoubleSolenoid.Value.kReverse);
     }
 }

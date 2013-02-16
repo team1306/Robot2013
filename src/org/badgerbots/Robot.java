@@ -29,8 +29,7 @@ public class Robot extends SimpleRobot {
     Dumper dumper;
     Victor climbHands;
     Victor climbFeet;
-    Servo climba;
-    Servo climbb;
+    Servo climbserva;
     LimitSwitch climbsa;
     LimitSwitch climbsb;
     LimitSwitch climbsc;
@@ -64,16 +63,15 @@ public class Robot extends SimpleRobot {
         dumper = new Dumper (dumpLowPot, dumpHighPot, dumpLow, dumpHigh);
         climbHands = new Victor(5);
         climbFeet = new Victor(6);
-        climba = new Servo (7);
-        climbb = new Servo(8);
+        climbserva = new Servo (7);
         climbsa = new LimitSwitch(1);
         climbsb = new LimitSwitch(2);
         climbsc = new LimitSwitch(3);
         climbsd = new LimitSwitch(4);
-        climber = new Climber(climbHands, climbFeet, climba, climbb, climbsa, climbsb, climbsc, climbsd);
+        climber = new Climber(climbHands, climbFeet, climbserva, climbsa, climbsb, climbsc, climbsd);
         stingCompress = new Compressor(5,1);
 	//stingCompress.start();
-        sting = new DoubleSolenoid (1, 2);
+        sting = new DoubleSolenoid (2,1);
         stingRunLt = new Solenoid(3);
         stingChargeLt = new Solenoid(4);
         stingSw = new DigitalInput(6);
@@ -114,23 +112,30 @@ public class Robot extends SimpleRobot {
     
     
     public void tele() {
-       if(rightJoy.getRawButton(10) && !climbing) climbing = true;
-       else if(rightJoy.getRawButton(10) && climbing) climbing = false;
+       if(rightJoy.getRawButton(10) && !climbing) 
+       {
+           climbing = true;
+       }
+       else if(rightJoy.getRawButton(10) && climbing)
+       {
+           climbing = false;
+       }
        
-       if(!climbing) {
-         // drive code
-        if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-lastTime) > 2000) {
+       if(!climbing)
+       { 
+           if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-lastTime) > 2000) 
+           {
             driveMode = !driveMode;
             lastTime = Timer.getFPGATimestamp();
-        }
-       
-        if (driveMode) {
+            }
+           if (driveMode)
+           {
             drive.drive();
-        }
-
-        else {
+           }
+        else 
+           {
             drive.arcadeDrive();
-        }
+          } 
        }
        else {
         // climber code
@@ -141,15 +146,26 @@ public class Robot extends SimpleRobot {
          climbHands.set(0);
         }
         else {
-            if(h > 0) climbHands.set(h - 0.15);
-            else climbHands.set(h + 0.15);
+            if(h > 0) {
+                climbHands.set(h - 0.15);
+            }
+            else
+            {
+                climbHands.set(h + 0.15);
+            }
         }
         if(Math.abs(f) < 0.15) {
             climbFeet.set(0);
         }
         else {
-           if(f > 0) climbFeet.set(f - 0.15);
-           else climbFeet.set(f + 0.15);
+           if(f > 0) 
+           {
+               climbFeet.set(f - 0.15);
+           }
+           else
+           {
+               climbFeet.set(f + 0.15);
+           }
         }
         System.out.println(climbHands.get() + "     " +climbFeet.get());
        }
@@ -160,11 +176,11 @@ public class Robot extends SimpleRobot {
                      lastTime = Timer.getFPGATimestamp();
        }*/
        
-        if(rightJoy.getRawButton(10) && (Timer.getFPGATimestamp()-lastTime2) > 2000 && !stingCompress.enabled()) {
+        if(rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) < 2000 && !stingCompress.enabled()) {
 	  stingCompress.start();
                      lastTime = Timer.getFPGATimestamp();
        }
-        else if (rightJoy.getRawButton(10) && (Timer.getFPGATimestamp()-lastTime2) > 2000 && stingCompress.enabled())
+        else if (rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) < 2000 && stingCompress.enabled())
         {
             stingCompress.stop();
              lastTime = Timer.getFPGATimestamp();
@@ -190,8 +206,13 @@ public class Robot extends SimpleRobot {
        }
        
        // stinger code
-       if(xcon.getButtonB() && !stinger.isTipped) {
+       if(xcon.getButtonB() && !stinger.isTipped) 
+       {
 	   stinger.tip();
+       }
+       else if (xcon.getButtonX() && stinger.isTipped)
+       {
+           stinger.untip();
        }
 
        double q = xcon.getLeftJoyY();

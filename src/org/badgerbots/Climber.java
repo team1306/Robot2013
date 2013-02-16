@@ -12,7 +12,7 @@ import org.badgerbots.lib.*;
  */
 public class Climber {
     
-    public Climber (Victor hands, Victor feet, Servo serva, Servo servb, LimitSwitch a, LimitSwitch b, LimitSwitch c, LimitSwitch d)
+    public Climber (Victor hands, Victor feet, Servo serva, LimitSwitch a, LimitSwitch b, LimitSwitch c, LimitSwitch d)
     {
         
         
@@ -20,7 +20,6 @@ public class Climber {
     Victor hands;
     Victor feet;
     Servo a;
-    Servo b;
     LimitSwitch serva;
     LimitSwitch servb;
     LimitSwitch c;
