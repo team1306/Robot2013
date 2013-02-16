@@ -132,6 +132,9 @@ public class Robot extends SimpleRobot {
     }
     
     public void auto() {
+	rightm.set(0.25);
+	leftm.set(0.25);
+	Timer.delay(2);
 	// driveleft.set(.22);
         // Timer.delay(4/1000);
     }
