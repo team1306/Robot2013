@@ -166,7 +166,7 @@ public class Robot extends SimpleRobot {
        else {
         // climber code
         double h = leftJoy.getY();
-        System.out.println("right joy " + h + "     left joy "  + f);
+        System.out.println("right joy " + h);
         if(Math.abs(h) < 0.15) {
          climbHands.set(0);
         }
