@@ -165,8 +165,7 @@ public class Robot extends SimpleRobot {
        }
        else {
         // climber code
-        double h = rightJoy.getY();
-        double f = leftJoy.getY();
+        double h = leftJoy.getY();
         System.out.println("right joy " + h + "     left joy "  + f);
         if(Math.abs(h) < 0.15) {
          climbHands.set(0);
@@ -180,8 +179,9 @@ public class Robot extends SimpleRobot {
                 climbHands.set(h + 0.15);
             }
         }
-        if(Math.abs(f) < 0.15) {
-            climbFeet.set(0);
+	drive.arcadeDrive();
+        /*if(Math.abs(f) < 0.15) {
+	  climbFeet.set(0);
         }
         else {
            if(f > 0) 
@@ -192,7 +192,7 @@ public class Robot extends SimpleRobot {
            {
                climbFeet.set(f + 0.15);
            }
-        }
+	   }*/
         System.out.println(climbHands.get() + "     " +climbFeet.get());
        }
        
@@ -241,6 +241,7 @@ public class Robot extends SimpleRobot {
            stinger.untip();
        }
 
+       // dumper code
        double q = xcon.getLeftJoyY();
        double r = xcon.getRightJoyY();
        
