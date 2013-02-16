@@ -249,16 +249,16 @@ public class Robot extends SimpleRobot {
            dumpHigh.set(0);
        }
        else {
-           if(q > 0) dumpHigh.set(q - 0.15);
-           else dumpHigh.set(q + 0.15);
+           if(q > 0) dumpHigh.set((q - 0.15)/8);
+           else dumpHigh.set((q + 0.15)/8);
        }
        
        if(Math.abs(r) < 0.15) {
            dumpLow.set(0);
        }
        else {
-           if(r > 0) dumpLow.set(r - 0.15);
-           else dumpLow.set(r + 0.15);
+           if(r > 0) dumpLow.set((r - 0.15)/2);
+           else dumpLow.set((r + 0.15)/2);
        }
        
        //dumper code
