@@ -53,7 +53,6 @@ public class Robot extends SimpleRobot {
     Encoder righte;
     PIDController leftc;
     PIDController rightc;
-   // AnalogChannel TestA;
     
     
     public Robot()
@@ -78,7 +77,6 @@ public class Robot extends SimpleRobot {
         climbsd = new LimitSwitch(4);
         climber = new Climber(climbHands, climbFeet, climbserva, climbsa, climbsb, climbsc, climbsd);
         stingCompress = new Compressor(5,1);
-	//stingCompress.start();
         sting = new DoubleSolenoid (2,1);
         stingRunLt = new Solenoid(3);
         stingChargeLt = new Solenoid(4);
@@ -96,27 +94,6 @@ public class Robot extends SimpleRobot {
 	righte.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
 	leftc = new PIDController(0.2, 0.3, 0.2, lefte, leftm);
 	rightc = new PIDController(0.2, 0.3, 0.2, righte, rightm);
-        //TestA = new AnalogChannel(1);
-	//Victor driveleft;
-	// Victor driveright;	
-	//Joystick joy;
-	//Victor upperseg;
-        // Check ports on everything later
-	// driveleft = new Victor(1);
-	// driveright = new Victor(2);
-	// joy = new Joystick(2);
-	// upperseg = new Victor(1);
-	// upperseg.set(0);
-	//Victor driveleft;
-	//Victor driveleft;
-	// Victor driveright;
-	//Joystick joy;
-	//Victor upperseg;
-	//  driveleft = new Victor(1);
-	//    driveright = new Victor(2);
-	//  joy = new Joystick(2);
-	//  upperseg = new Victor(1);
-	// upperseg.sept(0);
     }
 
     public void driveStraight(double distance) {
@@ -183,47 +160,19 @@ public class Robot extends SimpleRobot {
             }
         }
 	drive.arcadeDrive();
-        /*if(Math.abs(f) < 0.15) {
-	  climbFeet.set(0);
-        }
-        else {
-           if(f > 0) 
-           {
-               climbFeet.set(f - 0.15);
-           }
-           else
-           {
-               climbFeet.set(f + 0.15);
-           }
-	   }*/
         System.out.println(climbHands.get() + "     " +climbFeet.get());
        }
        
-       // compressor code
-       /*if(leftJoy.getRawButton(7) && (Timer.getFPGATimestamp()-lastTime2) > 2000) {
-	   compstate = !compstate;
-                     lastTime = Timer.getFPGATimestamp();
-       }*/
-       
-        if(rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) < 2000 && !stingCompress.enabled()) {
+       // compressor
+       if(rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) < 2000 && !stingCompress.enabled()) {
 	  stingCompress.start();
                      lastTime = Timer.getFPGATimestamp();
        }
-        else if (rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) < 2000 && stingCompress.enabled())
-        {
+       else if (rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) < 2000 && stingCompress.enabled()) {
             stingCompress.stop();
              lastTime = Timer.getFPGATimestamp();
         }
        
-     
-      /* if(compstate != stingCompress.enabled()) {
-	   if(compstate) {
-	       stingCompress.start();
-	   }
-	   else {
-	       stingCompress.stop();
-	   }
-       }*/
        
        if (stingCompress.enabled())
        {
@@ -263,29 +212,6 @@ public class Robot extends SimpleRobot {
            if(r > 0) dumpLow.set((r - 0.15)/2);
            else dumpLow.set((r + 0.15)/2);
        }
-       
-       //dumper code
-       /*
-       System.out.println(TestA.getVoltage());
-      
-       if (xcon.getButtonA()) {
-	   dumper.LowSlotLoad();
-       }
-       else if (xcon.getButtonB()) {
-	   dumper.LowGoalDump();
-       }
-       else if (xcon.getButtonX()) {
-	   dumper.PyramidClimb();
-       }
-       else if (xcon.getButtonY()) {
-	   dumper.PyramidDump();
-       }
-       else if (xcon.getButtonLS()) {
-	   dumper.MiddleSlotLoad();
-       }
-       else if (xcon.getButtonRS()) {
-	   dumper.ResetOrStop();
-       }*/
     }
     
     /**
