@@ -129,7 +129,7 @@ public class Robot extends SimpleRobot {
        
        if(!climbing)
        { 
-           if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-lastTime) > 2000) 
+           if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-lastTime) > 2) 
            {
             driveMode = !driveMode;
             lastTime = Timer.getFPGATimestamp();
@@ -164,13 +164,13 @@ public class Robot extends SimpleRobot {
        }
        
        // compressor
-       if(rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) < 2000 && !stingCompress.enabled()) {
+       if(rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) > 2 && !stingCompress.enabled()) {
 	  stingCompress.start();
-                     lastTime = Timer.getFPGATimestamp();
+                     lastTime2 = Timer.getFPGATimestamp();
        }
-       else if (rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) < 2000 && stingCompress.enabled()) {
+       else if (rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) > 2 && stingCompress.enabled()) {
             stingCompress.stop();
-             lastTime = Timer.getFPGATimestamp();
+             lastTime2 = Timer.getFPGATimestamp();
         }
        
        
@@ -188,7 +188,7 @@ public class Robot extends SimpleRobot {
        {
 	   stinger.tip();
        }
-       else if (xcon.getButtonX() && stinger.isTipped)
+       if (xcon.getButtonX() && stinger.isTipped)
        {
            stinger.untip();
        }
@@ -196,14 +196,17 @@ public class Robot extends SimpleRobot {
        // dumper code
        double q = xcon.getLeftJoyY();
        double r = xcon.getRightJoyY();
+       System.out.println(q);
        
        if(Math.abs(q) < 0.15) {
            dumpHigh.set(0);
        }
        else {
-           if(q > 0) dumpHigh.set((q - 0.15)/8);
-           else dumpHigh.set((q + 0.15)/8);
+           if(q > 0) dumpHigh.set((q - 0.15)/2.5);
+           else dumpHigh.set((q + 0.15)/6);
        }
+       
+       System.out.println(dumpHigh.get());
        
        if(Math.abs(r) < 0.15) {
            dumpLow.set(0);

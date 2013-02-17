@@ -35,12 +35,13 @@ public class Stinger {
     
     public void tip()
     {
-            solen.set(DoubleSolenoid.Value.kForward);
+            solen.set(DoubleSolenoid.Value.kReverse);
         isTipped = true;
     }
     
     public void untip()
     {
-        solen.set(DoubleSolenoid.Value.kReverse);
+        solen.set(DoubleSolenoid.Value.kForward);
+        isTipped=false;
     }
 }
