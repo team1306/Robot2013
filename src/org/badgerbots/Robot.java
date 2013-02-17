@@ -53,6 +53,7 @@ public class Robot extends SimpleRobot {
     Encoder righte;
     PIDController leftc;
     PIDController rightc;
+    Servo latch;
     
     
     public Robot()
@@ -94,6 +95,7 @@ public class Robot extends SimpleRobot {
 	righte.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
 	leftc = new PIDController(0.2, 0.3, 0.2, lefte, leftm);
 	rightc = new PIDController(0.2, 0.3, 0.2, righte, rightm);
+	latch = new Servo(8);
     }
 
     public void driveStraight(double distance) {
@@ -109,6 +111,7 @@ public class Robot extends SimpleRobot {
     }
     
     public void auto() {
+	latch.set(0);
 	rightm.set(0.25);
 	leftm.set(0.25);
 	Timer.delay(2);
