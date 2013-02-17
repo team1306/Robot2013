@@ -112,9 +112,10 @@ public class Robot extends SimpleRobot {
     
     public void auto() {
 	latch.set(0);
-	rightm.set(0.25);
+	stingCompress.start();
+	/*rightm.set(0.25);
 	leftm.set(0.25);
-	Timer.delay(2);
+	Timer.delay(2);*/
 	// driveleft.set(.22);
         // Timer.delay(4/1000);
     }
