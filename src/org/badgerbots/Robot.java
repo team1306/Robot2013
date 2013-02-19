@@ -194,10 +194,7 @@ public class Robot extends SimpleRobot {
      */
     public void autonomous() 
     {
-        while (isAutonomous()) {
-            auto();
-            Timer.delay(4/1000);
-        }
+        auto();
     }
 
     /**
