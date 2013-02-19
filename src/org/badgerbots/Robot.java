@@ -26,17 +26,10 @@ public class Robot extends SimpleRobot {
     TankDrive drive;
     Victor dumpHigh;
     Victor dumpLow;
-    Pot dumpLowPot;
-    Pot dumpHighPot;
-    Dumper dumper;
     Victor climbHands;
-    Victor climbFeet;
     Servo climbserva;
     LimitSwitch climbsa;
     LimitSwitch climbsb;
-    LimitSwitch climbsc;
-    LimitSwitch climbsd;
-    Climber climber;
     Compressor stingCompress;
     DoubleSolenoid sting;
     Solenoid stingRunLt;
@@ -49,10 +42,6 @@ public class Robot extends SimpleRobot {
     boolean compstate;
     boolean tipping;
     boolean climbing;
-    Encoder lefte;
-    Encoder righte;
-    PIDController leftc;
-    PIDController rightc;
     Servo latch;
     
     
@@ -66,17 +55,10 @@ public class Robot extends SimpleRobot {
         drive = new TankDrive(leftm, rightm, leftJoy, rightJoy);
         dumpHigh = new Victor (3);
         dumpLow = new Victor (4);
-        dumpLowPot = new Pot (1);
-        dumpHighPot = new Pot (2);
-        dumper = new Dumper (dumpLowPot, dumpHighPot, dumpLow, dumpHigh);
         climbHands = new Victor(5);
-        climbFeet = new Victor(6);
         climbserva = new Servo (7);
         climbsa = new LimitSwitch(1);
         climbsb = new LimitSwitch(2);
-        climbsc = new LimitSwitch(3);
-        climbsd = new LimitSwitch(4);
-        climber = new Climber(climbHands, climbFeet, climbserva, climbsa, climbsb, climbsc, climbsd);
         stingCompress = new Compressor(5,1);
         sting = new DoubleSolenoid (2,1);
         stingRunLt = new Solenoid(3);
@@ -89,33 +71,19 @@ public class Robot extends SimpleRobot {
         tipping = false;
         compstate = false;
         climbing = false;
-	lefte = new Encoder(7,8);
-	righte = new Encoder(9,10);
-	lefte.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
-	righte.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
-	leftc = new PIDController(0.2, 0.3, 0.2, lefte, leftm);
-	rightc = new PIDController(0.2, 0.3, 0.2, righte, rightm);
 	latch = new Servo(8);
-    }
-
-    public void driveStraight(double distance) {
-	double rate = 5;
-	righte.reset(); // sets encoder count to 0
-	lefte.reset();
-	rightc.setSetpoint(rate); // sets each PID controller to manage the speed and keep it close to rate
-	leftc.setSetpoint(rate);
-	
-	while(Math.abs(distance - righte.get()) > 5 || Math.abs(distance - lefte.get()) > 5) { // do this until the robot has moved distance
-	    Timer.delay(4/1000);
-	}
     }
     
     public void auto() {
 	latch.set(0);
 	stingCompress.start();
-	/*rightm.set(0.25);
+	climbHands.set(1);
+	rightm.set(0.25);
 	leftm.set(0.25);
-	Timer.delay(2);*/
+	Timer.delay(2);
+	rightm.set(0);
+	leftm.set(0);
+	Timer.delay(13);
 	// driveleft.set(.22);
         // Timer.delay(4/1000);
     }
@@ -164,7 +132,7 @@ public class Robot extends SimpleRobot {
             }
         }
 	drive.arcadeDrive();
-        System.out.println(climbHands.get() + "     " +climbFeet.get());
+        System.out.println(climbHands.get());
        }
        
        // compressor
