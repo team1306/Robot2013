@@ -75,15 +75,20 @@ public class Robot extends SimpleRobot {
     }
     
     public void auto() {
-	latch.set(0);
+                        rightm.setSafetyEnabled(false);
+                        leftm.setSafetyEnabled(false);
+	latch.setAngle(170);
 	stingCompress.start();
 	climbHands.set(1);
-	rightm.set(0.25);
-	leftm.set(0.25);
-	Timer.delay(2);
+	rightm.set(-0.43);
+	leftm.set(0.5);
+	Timer.delay(5);
 	rightm.set(0);
 	leftm.set(0);
-	Timer.delay(13);
+	Timer.delay(8);
+                        climbHands.set(0);
+                        rightm.setSafetyEnabled(true);
+                        leftm.setSafetyEnabled(true);
 	// driveleft.set(.22);
         // Timer.delay(4/1000);
     }
