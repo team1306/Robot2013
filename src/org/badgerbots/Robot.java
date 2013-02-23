@@ -28,8 +28,8 @@ public class Robot extends SimpleRobot {
     Victor dumpLow;
     Victor climbHands;
     Servo climbserva;
-    LimitSwitch climbsa;
-    LimitSwitch climbsb;
+    //LimitSwitch climbsa; //limit switches currently unused
+    //LimitSwitch climbsb;
     Compressor stingCompress;
     DoubleSolenoid sting;
     Solenoid stingRunLt;
@@ -37,8 +37,8 @@ public class Robot extends SimpleRobot {
     DigitalInput stingSw;
     Stinger stinger;
     boolean driveMode;
-    double lastTime;
-    double lastTime2;
+    double driveModeLastTime;
+    double compressorLastTime;
     boolean compstate;
     boolean tipping;
     boolean climbing;
@@ -57,8 +57,8 @@ public class Robot extends SimpleRobot {
         dumpLow = new Victor (4);
         climbHands = new Victor(5);
         climbserva = new Servo (7);
-        climbsa = new LimitSwitch(1);
-        climbsb = new LimitSwitch(2);
+        //climbsa = new LimitSwitch(1); //limit switches currently not used
+        //climbsb = new LimitSwitch(2);
         stingCompress = new Compressor(5,1);
         sting = new DoubleSolenoid (2,1);
         stingRunLt = new Solenoid(3);
@@ -66,8 +66,8 @@ public class Robot extends SimpleRobot {
         stingSw = new DigitalInput(6);
         stinger = new Stinger(sting, stingRunLt, stingChargeLt, xcon);
         driveMode = true;   //default to tank drive
-        lastTime = 0;
-        lastTime2 = 0;
+        driveModeLastTime = 0;
+        compressorLastTime = 0;
         tipping = false;
         compstate = false;
         climbing = false;
@@ -106,10 +106,10 @@ public class Robot extends SimpleRobot {
        
        if(!climbing)
        { 
-           if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-lastTime) > 2) 
+           if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-driveModeLastTime) > 2) 
            {
             driveMode = !driveMode;
-            lastTime = Timer.getFPGATimestamp();
+            driveModeLastTime = Timer.getFPGATimestamp();
             }
            if (driveMode)
            {
@@ -141,13 +141,13 @@ public class Robot extends SimpleRobot {
        }
        
        // compressor
-       if(rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) > 2 && !stingCompress.enabled()) {
+       if(rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-compressorLastTime) > 2 && !stingCompress.enabled()) {
 	  stingCompress.start();
-                     lastTime2 = Timer.getFPGATimestamp();
+                     compressorLastTime = Timer.getFPGATimestamp();
        }
-       else if (rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-lastTime2) > 2 && stingCompress.enabled()) {
+       else if (rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-compressorLastTime) > 2 && stingCompress.enabled()) {
             stingCompress.stop();
-             lastTime2 = Timer.getFPGATimestamp();
+             compressorLastTime = Timer.getFPGATimestamp();
         }
        
        
