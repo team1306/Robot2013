@@ -27,7 +27,7 @@ public class Robot extends SimpleRobot {
     Victor dumpHigh;
     Victor dumpLow;
     Victor climbHands;
-    Servo climbserva;
+    //Servo climbserva; //currently not in use
     //LimitSwitch climbsa; //limit switches currently unused
     //LimitSwitch climbsb;
     Compressor stingCompress;
@@ -43,20 +43,25 @@ public class Robot extends SimpleRobot {
     boolean tipping;
     boolean climbing;
     Servo latch;
+    Timer Clock;
+    int startTime;
+    double startClock;
     
     
     public Robot()
     {
+        startTime = 0;
+        Clock = new Timer();
         leftJoy = new Joystick(1);
         rightJoy = new Joystick(2);
         xcon = new XBoxController(3);
-	leftm = new Jaguar(1);
-	rightm = new Jaguar(2);
+        leftm = new Jaguar(1);
+        rightm = new Jaguar(2);
         drive = new TankDrive(leftm, rightm, leftJoy, rightJoy);
         dumpHigh = new Victor (3);
         dumpLow = new Victor (4);
         climbHands = new Victor(5);
-        climbserva = new Servo (7);
+        //climbserva = new Servo (7); //currently not in use
         //climbsa = new LimitSwitch(1); //limit switches currently not used
         //climbsb = new LimitSwitch(2);
         stingCompress = new Compressor(5,1);
@@ -71,26 +76,31 @@ public class Robot extends SimpleRobot {
         tipping = false;
         compstate = false;
         climbing = false;
-	latch = new Servo(8);
+        latch = new Servo(8);
     }
     
     public void auto() {
-                        rightm.setSafetyEnabled(false);
-                        leftm.setSafetyEnabled(false);
-	latch.setAngle(170);
-	stingCompress.start();
-	climbHands.set(1);
-	rightm.set(-0.43);
-	leftm.set(0.5);
-	Timer.delay(5);
-	rightm.set(0);
-	leftm.set(0);
-	Timer.delay(8);
-                        climbHands.set(0);
-                        rightm.setSafetyEnabled(true);
-                        leftm.setSafetyEnabled(true);
-	// driveleft.set(.22);
-        // Timer.delay(4/1000);
+        if  (0 == startTime){
+            startTime = 1;
+            startClock = Clock.get();
+        rightm.setSafetyEnabled(false);
+        leftm.setSafetyEnabled(false);
+        latch.setAngle(170);
+        stingCompress.start();
+        climbHands.set(1);
+        rightm.set(-0.43);
+        leftm.set(0.5);
+        }
+        if (Clock.get() > 1E6 + startClock){
+        rightm.set(0);
+        leftm.set(0);
+        }
+        /*Timer.delay(8);
+        climbHands.set(0);
+        rightm.setSafetyEnabled(true);
+        leftm.setSafetyEnabled(true);
+        // driveleft.set(.22);
+        // Timer.delay(4/1000);*/
     }
     
     
@@ -151,14 +161,14 @@ public class Robot extends SimpleRobot {
         }
        
        
-       if (stingCompress.enabled())
-       {
-           System.out.println("Compresor polling");
-       }
-       else
-       {
-           System.out.println("Compressor not polling");
-       }
+//       if (stingCompress.enabled()) //debug statement not needed
+//       {
+//           System.out.println("Compresor polling");
+//       }
+//       else
+//       {
+//           System.out.println("Compressor not polling");
+//       }
        
        // stinger code
        if(xcon.getButtonB() && !stinger.isTipped) 
