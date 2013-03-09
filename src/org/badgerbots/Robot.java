@@ -46,7 +46,8 @@ public class Robot extends SimpleRobot {
     Timer Clock;
     int startTime;
     double startClock;
-    
+    Encoder righte;
+    PIDController P;
     
     public Robot()
     {
@@ -77,30 +78,40 @@ public class Robot extends SimpleRobot {
         compstate = false;
         climbing = false;
         latch = new Servo(8);
+        righte = new Encoder(1,2);
+        P = new PIDController(0.2, 0.2 , 0.2, righte, rightm);
     }
     
-    public void auto() {
-        if  (0 == startTime){
-            startTime = 1;
-            startClock = Clock.get();
-        rightm.setSafetyEnabled(false);
-        leftm.setSafetyEnabled(false);
-        latch.setAngle(170);
-        stingCompress.start();
-        climbHands.set(1);
-        rightm.set(-0.43);
-        leftm.set(0.5);
+    public void autonomous() {
+        while (isAutonomous()){ //While autonomous mode is activated
+            if  (0 == startTime){ 
+                P.enable();
+                righte.setReverseDirection(true);
+                righte.start();
+                startTime = 1;
+                startClock = Clock.get(); 
+                Clock.start(); //Start the clock
+                rightm.setSafetyEnabled(false);
+                leftm.setSafetyEnabled(false);
+                latch.setAngle(170);
+                stingCompress.start();
+                climbHands.set(1);
+                P.setSetpoint(400);
+            }
+            if (Clock.get() > 0.1 + startClock){
+                System.out.println("Motor Speed " + righte.getRate());
+            }            
+            /*if (Clock.get() > 1 + startClock){
+                P.setSetpoint(0);
+            }*/
+                if (righte.getRaw() > 1000){
+                    //climbHands.set(0);
+                    rightm.setSafetyEnabled(true);
+                    leftm.setSafetyEnabled(true);
+                    System.out.println("Rotations: " + righte.getRaw());
+                    // driveleft.set(.22);
+                }
         }
-        if (Clock.get() > 1E6 + startClock){
-        rightm.set(0);
-        leftm.set(0);
-        }
-        /*Timer.delay(8);
-        climbHands.set(0);
-        rightm.setSafetyEnabled(true);
-        leftm.setSafetyEnabled(true);
-        // driveleft.set(.22);
-        // Timer.delay(4/1000);*/
     }
     
     
@@ -207,10 +218,10 @@ public class Robot extends SimpleRobot {
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
-    public void autonomous() 
+    /*public void autonomous() 
     {
         auto();
-    }
+    }*/
 
     /**
      * This function is called once each time the robot enters operator control.
