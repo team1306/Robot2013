@@ -161,11 +161,11 @@ public class Robot extends SimpleRobot {
        }
        
        // stinger code
-       if(xcon.getButtonB() && !stinger.isTipped) 
+       if(xcon.getButtonB() && !stinger.isTipped && climbing) 
        {
 	   stinger.tip();
        }
-       if (xcon.getButtonX() && stinger.isTipped)
+       if (xcon.getButtonX() && stinger.isTipped && climbing) //accidental stinger deploying is a penalty for bumpers
        {
            stinger.untip();
        }
