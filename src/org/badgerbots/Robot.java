@@ -43,16 +43,24 @@ public class Robot extends SimpleRobot {
     boolean tipping;
     boolean climbing;
     Servo latch;
-    Timer Clock;
+    Timer clock;
     int startTime;
     double startClock;
     Encoder righte;
     PIDController P;
+    AnalogChannel analog;
+    double voltage;
+    double T1;
+    double T2;
+    double T3;
+    double T4;
+    double T5;
+    double T6;
     
     public Robot()
     {
         startTime = 0;
-        Clock = new Timer();
+        clock = new Timer();
         leftJoy = new Joystick(1);
         rightJoy = new Joystick(2);
         xcon = new XBoxController(3);
@@ -80,40 +88,47 @@ public class Robot extends SimpleRobot {
         latch = new Servo(8);
         righte = new Encoder(1,2);
         P = new PIDController(0.2, 0.2 , 0.2, righte, rightm);
+        analog = new AnalogChannel(3);
     }
     
-    public void autonomous() {
-        while (isAutonomous()){ //While autonomous mode is activated
-            if  (0 == startTime){ 
-                P.enable();
-                righte.setReverseDirection(true);
-                righte.start();
-                startTime = 1;
-                startClock = Clock.get(); 
-                Clock.start(); //Start the clock
-                rightm.setSafetyEnabled(false);
-                leftm.setSafetyEnabled(false);
-                latch.setAngle(170);
-                stingCompress.start();
-                climbHands.set(1);
-                P.setSetpoint(400);
-            }
-            if (Clock.get() > 0.1 + startClock){
-                System.out.println("Motor Speed " + righte.getRate());
-            }            
-            /*if (Clock.get() > 1 + startClock){
-                P.setSetpoint(0);
-            }*/
-                if (righte.getRaw() > 1000){
-                    //climbHands.set(0);
-                    rightm.setSafetyEnabled(true);
-                    leftm.setSafetyEnabled(true);
-                    System.out.println("Rotations: " + righte.getRaw());
-                    // driveleft.set(.22);
-                }
+    public void auto()
+    {
+        voltage = analog.getVoltage();
+        System.out.println("voltage: " + voltage);
+           // "Drive" and "Turn" are not actual motor methods, they are placeholders.
+           // The "T" variables relate to different times. The robot performs different activities at certain times.
+           // All of this code is just a placeholder for when we figure out the actual Times and Directions to move the robot.
+        if (voltage > 4.0)
+        {
+            clock.start();
+                while (clock.get() < T1); //Robot drives backwards out of the starting gate
+                    rightm.Drive(); 
+                    leftm.Drive();
+                if (clock.get() < T2); //Robot turns 90 degree to the left
+                    rightm.Turn();
+                    leftm.Turn();
+                if (clock.get() < T3); //Robot drives backwards for a time
+                    rightm.Drive();
+                    leftm.Drive();
+                if (clock.get() < T4); //Robot turns 90 degrees to the left
+                    rightm.Turn();
+                    leftm.Turn();
+                if (clock.get() < T5); //Robot drives backwards until it is in range of the dumping goal
+                    rightm.Drive();
+                    leftm.Drive();
+                if (clock.get() < T6) //Robot dumps the frisbees into the goal
+                    dumpHigh.Dump();
+        }
+        else if (voltage < 1.0)
+        {
+            clock.start();
+            dumpHigh.Dump(); // This will dump your frisbees right off the bat. An ally will catch and shoot them, scoring more points than dumping
+        }
+        else
+        {
+            
         }
     }
-    
     
     public void tele() {
        if(rightJoy.getRawButton(10) && !climbing) 
@@ -218,10 +233,10 @@ public class Robot extends SimpleRobot {
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
-    /*public void autonomous() 
+    public void autonomous() 
     {
         auto();
-    }*/
+    }
 
     /**
      * This function is called once each time the robot enters operator control.
