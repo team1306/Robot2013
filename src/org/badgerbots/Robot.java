@@ -25,11 +25,7 @@ public class Robot extends SimpleRobot {
     Jaguar rightm;
     TankDrive drive;
     Victor dumpHigh;
-    Victor dumpLow;
     Victor climbHands;
-    //Servo climbserva; //currently not in use
-    //LimitSwitch climbsa; //limit switches currently unused
-    //LimitSwitch climbsb;
     Compressor stingCompress;
     DoubleSolenoid sting;
     Solenoid stingRunLt;
@@ -42,7 +38,7 @@ public class Robot extends SimpleRobot {
     boolean compstate;
     boolean tipping;
     boolean climbing;
-    Servo latch;
+    Servo blocker;
     Timer clock;
     int startTime;
     double startClock;
@@ -50,16 +46,16 @@ public class Robot extends SimpleRobot {
     PIDController P;
     AnalogChannel analog;
     double voltage;
-    double T1;
-    double T2;
-    double T3;
-    double T4;
-    double T5;
-    double T6;
+    double T1, T2;
+    Timer climberTimer;
+    DigitalInput limit;
+    double autostart;
     
-    public Robot()
-    {
+    public Robot() {
         startTime = 0;
+        T1 = 10;
+        T2 = 10;
+        climberTimer = new Timer();
         clock = new Timer();
         leftJoy = new Joystick(1);
         rightJoy = new Joystick(2);
@@ -68,174 +64,132 @@ public class Robot extends SimpleRobot {
         rightm = new Jaguar(2);
         drive = new TankDrive(leftm, rightm, leftJoy, rightJoy);
         dumpHigh = new Victor (3);
-        dumpLow = new Victor (4);
         climbHands = new Victor(5);
-        //climbserva = new Servo (7); //currently not in use
-        //climbsa = new LimitSwitch(1); //limit switches currently not used
-        //climbsb = new LimitSwitch(2);
         stingCompress = new Compressor(5,1);
+        stingCompress.start();
         sting = new DoubleSolenoid (2,1);
         stingRunLt = new Solenoid(3);
         stingChargeLt = new Solenoid(4);
         stingSw = new DigitalInput(6);
         stinger = new Stinger(sting, stingRunLt, stingChargeLt, xcon);
-        driveMode = true;   //default to tank drive
-        driveModeLastTime = 0;
         compressorLastTime = 0;
-        tipping = false;
-        compstate = false;
         climbing = false;
-        latch = new Servo(8);
-        righte = new Encoder(1,2);
-        P = new PIDController(0.2, 0.2 , 0.2, righte, rightm);
+        blocker = new Servo(9);
         analog = new AnalogChannel(3);
+        limit = new DigitalInput(1);
+        autostart = 0;
     }
     
     public void auto()
     {
-        voltage = analog.getVoltage();
-        System.out.println("voltage: " + voltage);
-           // "Drive" and "Turn" are not actual motor methods, they are placeholders.
-           // The "T" variables relate to different times. The robot performs different activities at certain times.
-           // All of this code is just a placeholder for when we figure out the actual Times and Directions to move the robot.
-        if (voltage > 4.0)
+        System.out.println(analog.getVoltage());
+        if (voltage > 2.33333)
         {
-            clock.start();
-                while (clock.get() < T1); //Robot drives backwards out of the starting gate
-                    rightm.Drive(); 
-                    leftm.Drive();
-                if (clock.get() < T2); //Robot turns 90 degree to the left
-                    rightm.Turn();
-                    leftm.Turn();
-                if (clock.get() < T3); //Robot drives backwards for a time
-                    rightm.Drive();
-                    leftm.Drive();
-                if (clock.get() < T4); //Robot turns 90 degrees to the left
-                    rightm.Turn();
-                    leftm.Turn();
-                if (clock.get() < T5); //Robot drives backwards until it is in range of the dumping goal
-                    rightm.Drive();
-                    leftm.Drive();
-                if (clock.get() < T6) //Robot dumps the frisbees into the goal
-                    dumpHigh.Dump();
+            if ((Timer.getFPGATimestamp() - autostart) < 3)
+            {
+                    double steer = voltage - 2.33333;
+                    if (steer < 1.333335)
+                    {
+                        rightm.set(.4);
+                        leftm.set(-((.075 * steer) +.3));
+                    }
+                    else
+                    {
+                        double steer2 = steer - 1.3333335;
+                         leftm.set(-.4);
+                        rightm.set((.075 * steer2) +.3);
+                    }
+            }
         }
-        else if (voltage < 1.0)
+        else if (voltage < 1)
         {
-            clock.start();
-            dumpHigh.Dump(); // This will dump your frisbees right off the bat. An ally will catch and shoot them, scoring more points than dumping
+            Timer.delay(3/1000);
         }
         else
         {
-            
+            if (((Timer.getFPGATimestamp() - autostart) > 10) && ((Timer.getFPGATimestamp() - autostart) < 12))
+            {
+                dumpHigh.set(.3);
+            }
         }
+        // deploy the hands and dumper
+        System.out.println(Timer.getFPGATimestamp() - autostart);
+        if(limit.get() && ((Timer.getFPGATimestamp() - autostart) < T2))
+        {
+                climbHands.set(1);
+         }
+        else 
+        {
+            climbHands.set(0);
+        }
+        System.out.println(analog.getVoltage());
     }
     
-    public void tele() {
-       if(rightJoy.getRawButton(10) && !climbing) 
-       {
-           climbing = true;
-       }
-       else if(rightJoy.getRawButton(10) && climbing)
-       {
-           climbing = false;
-       }
-       
-       if(!climbing)
-       { 
-           if (leftJoy.getRawButton(11) && (Timer.getFPGATimestamp()-driveModeLastTime) > 2) 
-           {
-            driveMode = !driveMode;
-            driveModeLastTime = Timer.getFPGATimestamp();
-            }
-           if (driveMode)
-           {
-            drive.drive();
-           }
-        else 
-           {
-            drive.arcadeDrive();
-          } 
-       }
-       else {
+    
+    public void tele()
+    {
+       drive.drive();
         // climber code
-        double h = leftJoy.getY();
-        System.out.println("right joy " + h);
+        double h = -xcon.getRightJoyY();
         if(Math.abs(h) < 0.15) {
          climbHands.set(0);
         }
-        else {
+        else{
             if(h > 0) {
-                climbHands.set(h - 0.15);
+                if(limit.get())
+                {
+                    climbHands.set(h - 0.15);
+                }
+                else
+                {
+                    climbHands.set(0);
+                }
             }
             else
             {
                 climbHands.set(h + 0.15);
             }
-        }
-	drive.arcadeDrive();
-        System.out.println(climbHands.get());
        }
-       
-       // compressor
-       if(rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-compressorLastTime) > 2 && !stingCompress.enabled()) {
-	  stingCompress.start();
-                     compressorLastTime = Timer.getFPGATimestamp();
-       }
-       else if (rightJoy.getRawButton(9) && (Timer.getFPGATimestamp()-compressorLastTime) > 2 && stingCompress.enabled()) {
-            stingCompress.stop();
-             compressorLastTime = Timer.getFPGATimestamp();
-        }
-       
-       
-//       if (stingCompress.enabled()) //debug statement not needed
-//       {
-//           System.out.println("Compresor polling");
-//       }
-//       else
-//       {
-//           System.out.println("Compressor not polling");
-//       }
        
        // stinger code
-       if(xcon.getButtonB() && !stinger.isTipped) 
+       if(xcon.getButtonB() && !stinger.isTipped /*&& climbing*/) 
        {
-	   stinger.tip();
+            stinger.tip();
        }
-       if (xcon.getButtonX() && stinger.isTipped)
+       if (xcon.getButtonX() && stinger.isTipped /*&& climbing*/)
        {
-           stinger.untip();
+            stinger.untip();
        }
-
        // dumper code
        double q = xcon.getLeftJoyY();
-       double r = xcon.getRightJoyY();
-       System.out.println(q);
        
-       if(Math.abs(q) < 0.15) {
+       if(Math.abs(q) < 0.15)
+       {
            dumpHigh.set(0);
        }
-       else {
-           if(q > 0) dumpHigh.set((q - 0.15)/2.5);
-           else dumpHigh.set((q + 0.15)/6);
+       else if(q > 0)
+       {
+               dumpHigh.set((q - 0.15)/2.5);
        }
-       
-       System.out.println(dumpHigh.get());
-       
-       if(Math.abs(r) < 0.15) {
-           dumpLow.set(0);
-       }
-       else {
-           if(r > 0) dumpLow.set((r - 0.15)/2);
-           else dumpLow.set((r + 0.15)/2);
-       }
+       else 
+       {
+               dumpHigh.set((q + 0.15)/6);
+       }     
+       System.out.println(analog.getVoltage());
     }
-    
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
     public void autonomous() 
     {
-        auto();
+        clock.start();
+        autostart = Timer.getFPGATimestamp();
+        voltage = analog.getVoltage();
+        System.out.println("Starting Voltage: " + voltage);
+        while(isAutonomous())
+        {
+            auto();
+        }
     }
 
     /**
@@ -243,7 +197,8 @@ public class Robot extends SimpleRobot {
      */
     public void operatorControl()
     {
-        while(isOperatorControl()) {
+        while(isOperatorControl())
+        {
             tele();
             Timer.delay(3/1000);
         }
