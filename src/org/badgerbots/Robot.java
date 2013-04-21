@@ -82,23 +82,42 @@ public class Robot extends SimpleRobot {
     
     public void auto()
     {
-        System.out.println(analog.getVoltage());
+       // System.out.println(analog.getVoltage());
         if (voltage > 2.33333)
         {
-            if ((Timer.getFPGATimestamp() - autostart) < 3)
+            if ((Timer.getFPGATimestamp() - autostart) < 8)
             {
+                    System.out.println("Timestamp: " +(Timer.getFPGATimestamp() - autostart)); 
                     double steer = voltage - 2.33333;
                     if (steer < 1.333335)
                     {
-                        rightm.set(.4);
-                        leftm.set(-((.075 * steer) +.3));
+                        leftm.set(.3);
+                        rightm.set(-((.075 * steer) +.2)); // .1 should be .2, otherwise it begins to turn.
                     }
                     else
                     {
                         double steer2 = steer - 1.3333335;
-                         leftm.set(-.4);
-                        rightm.set((.075 * steer2) +.3);
+                         rightm.set(-.3);
+                        leftm.set((.075 * steer2) +.2);
                     }
+            }
+            else if ((Timer.getFPGATimestamp() - autostart) <10 && ((Timer.getFPGATimestamp() - autostart) > 8))
+            {
+                rightm.set(0);
+                leftm.set(0);
+                dumpHigh.set(-.15);
+            }
+            else if (((Timer.getFPGATimestamp() - autostart) > 10) && ((Timer.getFPGATimestamp() - autostart) < 12))
+            {
+              dumpHigh.set(.3);  
+              leftm.set(0);
+              rightm.set(0);
+            }
+            else
+            {
+                dumpHigh.set(0);
+                leftm.set(0);
+                rightm.set(0);
             }
         }
         else if (voltage < 1)
@@ -113,7 +132,7 @@ public class Robot extends SimpleRobot {
             }
         }
         // deploy the hands and dumper
-        System.out.println(Timer.getFPGATimestamp() - autostart);
+       //System.out.println(Timer.getFPGATimestamp() - autostart);
         if(limit.get() && ((Timer.getFPGATimestamp() - autostart) < T2))
         {
                 climbHands.set(1);
@@ -122,7 +141,7 @@ public class Robot extends SimpleRobot {
         {
             climbHands.set(0);
         }
-        System.out.println(analog.getVoltage());
+      //  System.out.println(analog.getVoltage());
     }
     
     
@@ -175,7 +194,7 @@ public class Robot extends SimpleRobot {
        {
                dumpHigh.set((q + 0.15)/6);
        }     
-       System.out.println(analog.getVoltage());
+       //System.out.println(analog.getVoltage());
     }
     /**
      * This function is called once each time the robot enters autonomous mode.
