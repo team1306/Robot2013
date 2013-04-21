@@ -27,21 +27,21 @@ public class Robot extends SimpleRobot {
     Victor dumpHigh;
     Victor climbHands;
     Compressor stingCompress;
-    DoubleSolenoid sting;
-    Solenoid stingRunLt;
-    Solenoid stingChargeLt;
-    DigitalInput stingSw;
-    Stinger stinger;
+    //DoubleSolenoid sting;
+    //Solenoid stingRunLt;
+    //Solenoid stingChargeLt;
+    //DigitalInput stingSw;
+    //Stinger stinger;
     boolean driveMode;
     double driveModeLastTime;
     double compressorLastTime;
-    boolean compstate;
-    boolean tipping;
-    boolean climbing;
-    Servo blocker;
+    //boolean compstate;
+    //boolean tipping;
+    //boolean climbing;
+    //Servo blocker;
     Timer clock;
     int startTime;
-    double startClock;
+    //double startClock;
     Encoder righte;
     PIDController P;
     AnalogChannel analog;
@@ -50,6 +50,8 @@ public class Robot extends SimpleRobot {
     Timer climberTimer;
     DigitalInput limit;
     double autostart;
+    PneumaticClimber pneumaticClimber;
+    DoubleSolenoid climbPneumatic;
     
     public Robot() {
         startTime = 0;
@@ -64,17 +66,19 @@ public class Robot extends SimpleRobot {
         rightm = new Jaguar(2);
         drive = new TankDrive(leftm, rightm, leftJoy, rightJoy);
         dumpHigh = new Victor (3);
-        climbHands = new Victor(5);
+        //climbHands = new Victor(5);
         stingCompress = new Compressor(5,1);
         stingCompress.start();
-        sting = new DoubleSolenoid (2,1);
-        stingRunLt = new Solenoid(3);
-        stingChargeLt = new Solenoid(4);
-        stingSw = new DigitalInput(6);
-        stinger = new Stinger(sting, stingRunLt, stingChargeLt, xcon);
+        //sting = new DoubleSolenoid (2,1);
+        //stingRunLt = new Solenoid(3);
+        //stingChargeLt = new Solenoid(4);
+        //stingSw = new DigitalInput(6);
+        //stinger = new Stinger(sting, stingRunLt, stingChargeLt, xcon);
+        climbPneumatic = new DoubleSolenoid (2,1);
+        pneumaticClimber = new PneumaticClimber(climbPneumatic);
         compressorLastTime = 0;
-        climbing = false;
-        blocker = new Servo(9);
+        //climbing = false;
+        //blocker = new Servo(9);
         analog = new AnalogChannel(3);
         limit = new DigitalInput(1);
         autostart = 0;
@@ -131,16 +135,19 @@ public class Robot extends SimpleRobot {
                 dumpHigh.set(.3);
             }
         }
+        if (!pneumaticClimber.isExtended) {
+            pneumaticClimber.extend();
+        }
         // deploy the hands and dumper
        //System.out.println(Timer.getFPGATimestamp() - autostart);
-        if(limit.get() && ((Timer.getFPGATimestamp() - autostart) < T2))
-        {
-                climbHands.set(1);
-         }
-        else 
-        {
-            climbHands.set(0);
-        }
+//        if(limit.get() && ((Timer.getFPGATimestamp() - autostart) < T2))
+//        {
+//                climbHands.set(1);
+//         }
+//        else 
+//        {
+//            climbHands.set(0);
+//        }
       //  System.out.println(analog.getVoltage());
     }
     
@@ -148,37 +155,46 @@ public class Robot extends SimpleRobot {
     public void tele()
     {
        drive.drive();
-        // climber code
-        double h = -xcon.getRightJoyY();
-        if(Math.abs(h) < 0.15) {
-         climbHands.set(0);
-        }
-        else{
-            if(h > 0) {
-                if(limit.get())
-                {
-                    climbHands.set(h - 0.15);
-                }
-                else
-                {
-                    climbHands.set(0);
-                }
-            }
-            else
-            {
-                climbHands.set(h + 0.15);
-            }
+       
+       // Pneumatic climber code
+       if (xcon.getButtonB() && !pneumaticClimber.isExtended) {
+           pneumaticClimber.extend();
+       }
+       if (xcon.getButtonX() && pneumaticClimber.isExtended) {
+           pneumaticClimber.retract();
        }
        
+        // climber code
+//        double h = -xcon.getRightJoyY();
+//        if(Math.abs(h) < 0.15) {
+//         climbHands.set(0);
+//        }
+//        else{
+//            if(h > 0) {
+//                if(limit.get())
+//                {
+//                    climbHands.set(h - 0.15);
+//                }
+//                else
+//                {
+//                    climbHands.set(0);
+//                }
+//            }
+//            else
+//            {
+//                climbHands.set(h + 0.15);
+//            }
+//       }
+       
        // stinger code
-       if(xcon.getButtonB() && !stinger.isTipped /*&& climbing*/) 
-       {
-            stinger.tip();
-       }
-       if (xcon.getButtonX() && stinger.isTipped /*&& climbing*/)
-       {
-            stinger.untip();
-       }
+//       if(xcon.getButtonB() && !stinger.isTipped /*&& climbing*/) 
+//       {
+//            stinger.tip();
+//       }
+//       if (xcon.getButtonX() && stinger.isTipped /*&& climbing*/)
+//       {
+//            stinger.untip();
+//       }
        // dumper code
        double q = xcon.getLeftJoyY();
        

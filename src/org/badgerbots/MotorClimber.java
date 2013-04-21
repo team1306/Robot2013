@@ -10,9 +10,9 @@ import org.badgerbots.lib.*;
  *
  * @author Badge
  */
-public class Climber {
+public class MotorClimber {
     
-    public Climber (Victor hands, Victor feet, Servo serva, LimitSwitch a, LimitSwitch b, LimitSwitch c, LimitSwitch d)
+    public MotorClimber (Victor hands, Victor feet, Servo serva, LimitSwitch a, LimitSwitch b, LimitSwitch c, LimitSwitch d)
     {
         
         
